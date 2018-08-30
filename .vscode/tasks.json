@@ -1,0 +1,29 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Make All(Build)",
+            "type": "shell",
+            "group" : "build",
+            "command": "make all"
+        },
+        {
+            "label" : "Make Clean",
+            "type" : "shell",
+            "group" : "build",
+            "command" : "make clean"
+        }, 
+        {
+            "label" : "Launch", 
+            "type" : "shell",
+            "group" : "test",
+            "command" : ".\\qemu.exe -L . -m 64 -fda ${workspaceRoot}\\disk.img -localtime -M pc",
+            "options" : {
+                "cwd": "d:\\qemu-0.10.4"
+            }
+        }
+
+    ]
+}
