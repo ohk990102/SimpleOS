@@ -14,12 +14,12 @@
             "type" : "shell",
             "group" : "build",
             "command" : "make clean"
-        }, 
+        },
         {
             "label" : "Launch", 
             "type" : "shell",
             "group" : "test",
-            "command" : ".\\qemu.exe -L . -m 64 -fda ${workspaceRoot}\\disk.img -localtime -M pc",
+            "command" : ".\\qemu-system-x86_64.exe -L . -m 64 -fda ${workspaceRoot}\\disk.img -localtime -M pc",
             "options" : {
                 "cwd": "d:\\qemu-0.10.4"
             }

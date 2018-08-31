@@ -13,7 +13,8 @@ BuildKernel32:
 Wrapup: bootloader/bootloader.bin kernel32/kernel32.bin
 	@echo [*] Wrapup
 	@echo [*] Building disk image
-	cat $^ > disk.img
+	
+	./imagemaker.exe $^
 
 	@echo [+] Building disk image Complete
 	@echo [+] Wrapup Complete

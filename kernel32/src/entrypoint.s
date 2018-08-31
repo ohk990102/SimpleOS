@@ -8,16 +8,29 @@ START:
     mov ds, ax
     mov es, ax
 
+    mov ax, 0x2401
+    int 0x15
+
+    jc .A20GATEERROR
+    jmp .A20GATESUCCESS
+
+.A20GATEERROR:
+    in al, 0x92
+    or al, 0x02
+    and al, 0xFE
+    out 0x92, al
+
+.A20GATESUCCESS:
     cli
     lgdt [GDTR]
     mov eax, 0x4000003B
     mov cr0, eax
 
-    jmp dword 0x08:(PROTECTEDMODE - $$ + 0x10000)
+    jmp dword 0x18:(PROTECTEDMODE - $$ + 0x10000)
 
 [BITS 32]
 PROTECTEDMODE:
-    mov ax, 0x10
+    mov ax, 0x20
     mov ds, ax
     mov es, ax
     mov fs, ax
@@ -32,7 +45,7 @@ PROTECTEDMODE:
     call PRINTMESSAGE
     add esp, 12
 
-    jmp $
+    jmp dword 0x18: 0x10200
 
 PRINTMESSAGE:
     push ebp
@@ -93,6 +106,21 @@ GDT:
         db 0x00
         db 0x00
         db 0x00
+    IA_32eCODEDescriptor:
+        dw 0xFFFF
+        dw 0x0000
+        db 0x00
+        db 0x9A
+        db 0xAF
+        db 0x00
+    IA_32eDATADescriptor:
+        dw 0xFFFF
+        dw 0x0000
+        db 0x00
+        db 0x92
+        db 0xAF
+        db 0x00
+
     CODEDescriptor:
         dw 0xFFFF
         dw 0x0000
@@ -110,5 +138,5 @@ GDT:
         db 0x00
 GDTEND:
 
-SWITCHSUCCESSMESSAGE: db '[+] Switching to Protected Mode Succeeded', 0
+SWITCHSUCCESSMESSAGE: db '[+] Switching to Protected Mode Complete', 0
 times 512 - ($ - $$) db 0x00
